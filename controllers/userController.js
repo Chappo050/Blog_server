@@ -2,7 +2,9 @@ const { mongo, default: mongoose } = require("mongoose");
 const User = require("../models/user.js");
 const Post = require("../models/post.js");
 const { DateTime } = require("luxon");
+const bcrypt = require('bcrypt');
 const { body, validationResult } = require("express-validator"); //Data parsing
+const passport = require("passport");
 
 // Display list of all User.
 exports.init = (req, res, next) => {
@@ -10,7 +12,7 @@ exports.init = (req, res, next) => {
 };
 
 // Display list of all User.
-exports.create_new_user = [
+exports.register_new_user = [
   //Trim data
   //Add extra data validation
   body("username", "User name required").trim().isLength({ min: 1 }).escape(),
@@ -18,19 +20,20 @@ exports.create_new_user = [
   body("password", "Longer password is required").trim().isLength({ min: 6 }).escape(),
 
   // Process request after validation and sanitization.
-  (req, res, next) => {
+  async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    // Create a user object with escaped and trimmed data.
-    const user = new User(
-      {
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-      }
+      const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
-    );
+      const user = new User(
+        {
+          username: req.body.username,
+          email: req.body.email,
+          password: hashedPassword,
+          date_registered: Date.now(),
+        }
+      );
 
     if (!errors.isEmpty()) {
       // There are errors. Return data and erros as JSON
@@ -122,3 +125,24 @@ exports.create_new_post = [
 
 
 ]
+
+exports.user_login_post =  (req, res, next) => {
+    passport.authenticate("local", function(err, user, info) {
+        if (err) {
+            return res.status(400).json({ errors: err });
+        }
+        if (!user) {
+            return res.status(400).json({ errors: "No user found" });
+        }
+        req.logIn(user, function(err) {
+            if (err) {
+                return res.status(400).json({ errors: err });
+            }
+            return res.status(200).json({ success: `logged in ${user.id}` });
+        });
+    })(req, res, next);
+}
+
+exports.user_login_get = (req,res, next) => {
+  res.json({ Message: "Hello, welcome to the users login page :). Please sign in" });
+}
