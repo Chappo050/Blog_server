@@ -1,11 +1,16 @@
+//IMPORTS
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const dotenv = require('dotenv');
 const compression = require('compression'); //Compression
 const helmet = require('helmet'); //Protection
+
+//READ .ENV
+dotenv.config();
 
 //Route imports
 var indexRouter = require('./routes/index');
@@ -17,8 +22,7 @@ var app = express();
 
 // Set up mongoose connection to mongoDB
 const mongoose = require("mongoose");
-const dev_db_url =  "mongodb+srv://Chappo:gKYjtta4UQVFt7Jz@cluster0.ajhedsi.mongodb.net/local_library?retryWrites=true&w=majority";
-const mongoDB = process.env.MONGODB_URI || dev_db_url;
+const mongoDB = process.env.MONGODB_URI;
 
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -50,7 +54,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({error: err});
 });
 
 module.exports = app;
