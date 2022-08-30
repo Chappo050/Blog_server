@@ -26,6 +26,7 @@ const User = require("./models/user.js");
 //Route imports
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
+var blogRouter = require("./routes/blog");
 
 var app = express();
 
@@ -64,6 +65,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //ROUTES
 app.use("/", indexRouter);
 app.use("/user", userRouter);
+app.use("/blog", blogRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

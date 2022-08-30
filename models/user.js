@@ -12,6 +12,15 @@ const UserSchema = new Schema(
   }
 );
 
+UserSchema
+.virtual('date_formatted')
+.get(function() {
+  return  DateTime.fromJSDate(this.date_registed).toLocaleString(DateTime.DATE_MED);
+});
+
+
+
+
 
 //Export model
 module.exports = mongoose.model('User', UserSchema);
