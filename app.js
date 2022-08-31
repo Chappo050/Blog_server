@@ -12,6 +12,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+const cors = require('cors');
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
@@ -44,6 +45,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 
 //Middleware
+app.use(cors({origin: true, credentials: true}))
 app.use(flash());
 app.use(
   session({
