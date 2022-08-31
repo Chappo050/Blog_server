@@ -8,6 +8,7 @@ const blogController = require("../controllers/blogController");
 router.get("/", blogController.get_post_list);
 
 router.get('/post', authCheck.checkAuthenticated, blogController.get_posting_page)
+
 //POST//
 
 router.post('/post', authCheck.checkAuthenticated, blogController.create_new_post)
