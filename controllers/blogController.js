@@ -1,6 +1,6 @@
 const { body, validationResult } = require("express-validator"); //Data parsing
 const Post = require("../models/post.js");
-
+const User = require("../models/user.js");
 
 exports.create_new_post = [
     //Trim data
@@ -51,6 +51,7 @@ exports.create_new_post = [
                 if (err) {
                   return next(err);
                 }
+
                 res.json({message: "Post successfully added to database"});
               });
             }
@@ -71,7 +72,8 @@ exports.get_posting_page = (req, res, next) => {
 exports.get_post_list = (req, res, next) => {
  
   Post.find({}, {'__v': 0})
-  .sort({title: 1})
+  .sort({post_time: -1})
+  .limit(10)
   .populate('user_details', {'__v': 0, 'password': 0})
   .exec(function (err, list_posts) {
     if (err) {return next(err);}
