@@ -94,12 +94,12 @@ var checkAuthenticated = function checkAuthenticated(req, res, next) {
     return next();
   }
 
-  res.redirect("/login");
+  res.json("/login");
 };
 
 var checkNotAuthenticated = function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return res.redirect("/");
+    return res.json("/");
   }
 
   return next();

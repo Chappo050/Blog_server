@@ -5,12 +5,12 @@ exports.checkAuthenticated = (req, res, next) => {
       return next();
     }
   
-    res.redirect("/user/login");
+    res.json("/user/login");
   };
   
 exports.checkNotAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
-      return res.redirect("/");
+      return res.json("/");
     }
   
     return next();
