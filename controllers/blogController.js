@@ -1,4 +1,5 @@
 const { body, validationResult } = require("express-validator"); //Data parsing
+const post = require("../models/post.js");
 const Post = require("../models/post.js");
 const User = require("../models/user.js");
 
@@ -61,6 +62,17 @@ exports.create_new_post = [
   },
 ];
 
+exports.count_posts = (req, res, next) => {
+  Post.countDocuments({}).exec(function (err, count) {
+    if (err) {
+      return next(err);
+    }
+    //Successful, so send JSON
+    res.json(count);
+  });
+
+}
+
 exports.get_posting_page = (req, res, next) => {
   res.status(200).json({message:"all good"})
 };
@@ -68,7 +80,8 @@ exports.get_posting_page = (req, res, next) => {
 // Display list of all books.
 exports.get_post_list = (req, res, next) => {
   Post.find({}, { __v: 0 })
-    .sort({ post_time: -1 })
+  .sort({ post_time: -1 })
+  .skip(req.query.pointer)
     .limit(10)
     .populate("user_details", { username: 1 })
     .exec(function (err, list_posts) {

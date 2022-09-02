@@ -7,7 +7,11 @@ const blogController = require("../controllers/blogController");
 /* GET users listing. */
 router.get("/overview", blogController.get_post_list);
 
-router.get('/post', authCheck.checkAuthenticated, blogController.get_posting_page)
+router.get("/overview/count", blogController.count_posts);
+
+router.get('/post/:pointer', authCheck.checkAuthenticated, blogController.get_posting_page)
+
+
 
 //POST//
 
