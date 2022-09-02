@@ -11,6 +11,6 @@ router.get('/post', authCheck.checkAuthenticated, blogController.get_posting_pag
 
 //POST//
 
-router.post('/post', authCheck.checkNotAuthenticated, blogController.create_new_post)
+router.post('/post', authCheck.checkAuthenticated, blogController.create_new_post)
 
 module.exports = router;

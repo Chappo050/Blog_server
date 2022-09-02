@@ -16,7 +16,7 @@ exports.register_new_user = [
   //Add extra data validation
   body("username", "User name required").trim().isLength({ min: 1 }).escape(),
   body("email", "Email is required").trim().isLength({ min: 1 }).escape(),
-  body("password", "Longer password is required").trim().isLength({ min: 6 }).escape(),
+  body("password", "Longer password is required").trim().isLength({ min: 2 }).escape(), //update this
 
   // Process request after validation and sanitization.
   async (req, res, next) => {
