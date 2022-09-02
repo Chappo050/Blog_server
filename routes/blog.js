@@ -5,7 +5,7 @@ const blogController = require("../controllers/blogController");
 
 //GET//
 /* GET users listing. */
-router.get("/", blogController.get_post_list);
+router.get("/overview", blogController.get_post_list);
 
 router.get('/post', authCheck.checkAuthenticated, blogController.get_posting_page)
 
