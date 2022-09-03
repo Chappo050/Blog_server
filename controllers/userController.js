@@ -85,6 +85,8 @@ exports.user_login_post = (req, res, next) => {
   })(req, res, next);
 };
 
+
+
 exports.user_login_get = (req, res, next) => {
   res.json({
     Message: "Hello, welcome to the users login page :). Please sign in",
@@ -93,6 +95,6 @@ exports.user_login_get = (req, res, next) => {
 
 exports.user_logout = (req, res) => {
   req.session.destroy(function (err) {
-      res.redirect(back);
+      res.redirect('/');
   });
 };
