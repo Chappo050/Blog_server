@@ -28,7 +28,6 @@ exports.create_new_post = [
     });
     if (!errors.isEmpty()) {
       // There are errors. Return data and erros as JSON
-      console.log("here");
       res.json({
         user,
         errors: errors.array(),

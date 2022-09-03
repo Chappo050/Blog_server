@@ -21,7 +21,7 @@ const session = require("express-session");
 const compression = require("compression"); //Compression
 const helmet = require("helmet"); //Protection
 const initilizePassport = require("./passport_config");
-
+const MongoStore = require('connect-mongo');
 //Model
 const User = require("./models/user.js");
 
@@ -45,6 +45,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 
 
+
 //Middleware
 app.use(cors({origin: true, credentials: true}))
 app.use(flash());
@@ -53,6 +54,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: mongoDB, collection: 'sessions' })
   })
 );
 app.use(passport.initialize());

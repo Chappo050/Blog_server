@@ -26,8 +26,12 @@ router.post("/register", userController.register_new_user);
 
 router.post(
   "/login",
-  authCheck.checkNotAuthenticated,
   userController.user_login_post
+);
+
+router.get(
+  "/logout",
+  userController.user_logout
 );
 
 module.exports = router;
