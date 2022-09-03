@@ -70,18 +70,55 @@ exports.count_posts = (req, res, next) => {
     //Successful, so send JSON
     res.json(count);
   });
+};
 
-}
+exports.count_posts_user = (req, res, next) => {
+  let query = {}
+  if (req.params.userId) {
+    const userId = req.params.userId;
+    query = {user_details: userId}
+  } 
+  Post.countDocuments(query).exec(function (err, count) {
+    if (err) {
+      return next(err);
+    }
+    //Successful, so send JSON
+    res.json(count);
+  });
+};
+
 
 exports.get_posting_page = (req, res, next) => {
-  res.status(200).json({message:"all good"})
+  res.status(200).json({ message: "all good" });
 };
 
 // Display list of all books.
 exports.get_post_list = (req, res, next) => {
+
   Post.find({}, { __v: 0 })
-  .sort({ post_time: -1 })
-  .skip(req.query.pointer)
+    .sort({ post_time: -1 })
+    .skip(req.query.pointer)
+    .limit(10)
+    .populate("user_details", { username: 1 })
+    .exec(function (err, list_posts) {
+      if (err) {
+        return next(err);
+      }
+      //Successful, so send JSON
+      res.json(list_posts);
+    });
+};
+
+// Display list of all books.
+exports.get_user_post_list = (req, res, next) => {
+  let query = {}
+  if (req.params.userId) {
+    const userId = req.params.userId;
+    query = {user_details: userId}
+  } 
+  Post.find(query, { __v: 0 })
+    .sort({ post_time: -1 })
+    .skip(req.query.pointer)
     .limit(10)
     .populate("user_details", { username: 1 })
     .exec(function (err, list_posts) {
