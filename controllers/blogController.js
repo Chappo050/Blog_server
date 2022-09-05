@@ -10,7 +10,6 @@ exports.create_new_post = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("isPublic", "Public by default").trim().isLength({ min: 1 }).escape(),
   // Process request after validation and sanitization.
   (req, res, next) => {
     // Extract the validation errors from a request.
@@ -24,8 +23,9 @@ exports.create_new_post = [
       user_details: req.user.id,
       message: req.body.message,
       post_time: current_time,
-      public: req.body.isPublic,
+      isPublic: req.body.isPublic,
     });
+    console.log(req.body.isPublic);
     if (!errors.isEmpty()) {
       // There are errors. Return data and erros as JSON
       res.json({
