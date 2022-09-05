@@ -13,13 +13,18 @@ router.get("/overview/count", blogController.count_posts);
 
 router.get("/:userId/count", blogController.count_posts_user);
 
-router.get('/post', authCheck.checkAuthenticated, blogController.get_posting_page)
-
-
+router.get('/post/:postId', authCheck.checkAuthenticated, blogController.get_single_post)
 
 
 //POST//
 
 router.post('/post', authCheck.checkAuthenticated, blogController.create_new_post)
+
+
+router.post("/post/:postId/", blogController.edit_post);
+
+
+//DELETE//
+router.delete("/:userId/", blogController.delete_post);
 
 module.exports = router;
