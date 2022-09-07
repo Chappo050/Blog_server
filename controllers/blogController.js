@@ -72,10 +72,17 @@ exports.count_posts = (req, res, next) => {
 
 exports.count_posts_user = (req, res, next) => {
   let query = {};
-  if (req.params.userId) {
+  //Not logged in
+  if (req.params.userId && req.query.auth === "false") {
+    const userId = req.params.userId;
+    query = { user_details: userId, isPublic: true };
+  }
+  //Logged in
+  else {
     const userId = req.params.userId;
     query = { user_details: userId };
   }
+
   Post.countDocuments(query).exec(function (err, count) {
     if (err) {
       return next(err);
@@ -114,9 +121,17 @@ exports.get_post_list = (req, res, next) => {
 // Display list of all books.
 exports.get_user_post_list = (req, res, next) => {
   let query = {};
-  if (req.params.userId) {
+  console.log(req.params.userId + "   " + req.query.auth);
+  //Not logged in
+  if (req.params.userId && req.query.auth === "false") {
+    console.log("here");
     const userId = req.params.userId;
     query = { user_details: userId, isPublic: true };
+  }
+  //Logged in
+  else {
+    const userId = req.params.userId;
+    query = { user_details: userId };
   }
   Post.find(query, { __v: 0 })
     .sort({ post_time: -1 })
@@ -131,7 +146,6 @@ exports.get_user_post_list = (req, res, next) => {
       res.json(list_posts);
     });
 };
-
 
 exports.edit_post = [
   //Trim data
