@@ -1,9 +1,11 @@
 const { mongo, default: mongoose } = require("mongoose");
 const User = require("../models/user.js");
+const Session = require("../models/session.js");
 const { DateTime } = require("luxon");
 const bcrypt = require("bcrypt");
 const { body, validationResult } = require("express-validator"); //Data parsing
 const passport = require("passport");
+const { query } = require("express");
 
 // Display list of all User.
 exports.init = (req, res, next) => {
@@ -85,8 +87,6 @@ exports.user_login_post = (req, res, next) => {
   })(req, res, next);
 };
 
-
-
 exports.user_login_get = (req, res, next) => {
   res.json({
     Message: "Hello, welcome to the users login page :). Please sign in",
@@ -95,6 +95,35 @@ exports.user_login_get = (req, res, next) => {
 
 exports.user_logout = (req, res) => {
   req.session.destroy(function (err) {
-      res.redirect('/');
+    res.redirect("/");
   });
+};
+
+exports.get_user_logged_in = (req, res, next) => {
+  if (!req.user.id) {
+    res.status(403).json("Could not find user. Please log in");
+  }
+  const query = req.user.id;
+
+  Session.findOne({ session: { $regex: query, $options: "i" } }).exec(
+    (err, user) => {
+      if (err) {
+        return next(err);
+      }
+
+      if (user) {
+        console.log(user);
+        // User session exists. Extract time
+        if (user.expires.valueOf() > Date.now().valueOf()) {
+          res.status(200).json({ message: "Users session is still valid" });
+        } else {
+          res
+            .status(403)
+            .json({ message: "User found, session expired. Access forbidden" });
+        }
+      } else {
+        res.status(403).json({ message: "User not found. Access forbidden" });
+      }
+    }
+  );
 };

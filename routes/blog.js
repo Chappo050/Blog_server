@@ -21,10 +21,10 @@ router.get('/post/:postId', authCheck.checkAuthenticated, blogController.get_sin
 router.post('/post', authCheck.checkAuthenticated, blogController.create_new_post)
 
 
-router.post("/post/:postId/", blogController.edit_post);
+router.post("/post/:postId/", authCheck.checkAuthenticated, blogController.edit_post);
 
 
 //DELETE//
-router.delete("/:userId/", blogController.delete_post);
+router.delete("/:userId/", authCheck.checkAuthenticated, blogController.delete_post);
 
 module.exports = router;

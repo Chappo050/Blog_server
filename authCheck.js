@@ -7,12 +7,12 @@ exports.checkAuthenticated = (req, res, next) => {
       return next();
     }
   
-    res.status(403).redirect('/user/login');
+    res.status(403).json({});
   };
   
 exports.checkNotAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
-      return res.status(403).redirect('/');
+      return res.status(403).json({});
     }
   
     return next();

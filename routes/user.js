@@ -14,10 +14,8 @@ router.get(
   userController.user_login_get
 );
 
-//testing if logged in
-router.get("/secret", authCheck.checkAuthenticated, (req, res) =>
-  res.json({ message: "you found a secret" })
-);
+//Check if the current session is still valid   ???
+router.get("/auth", userController.get_user_logged_in)
 
 //POST//
 
@@ -25,12 +23,12 @@ router.get("/secret", authCheck.checkAuthenticated, (req, res) =>
 router.post("/register", userController.register_new_user);
 
 router.post(
-  "/login",
+  "/login", authCheck.checkNotAuthenticated,
   userController.user_login_post
 );
 
 router.get(
-  "/logout",
+  "/logout", authCheck.checkAuthenticated,
   userController.user_logout
 );
 
