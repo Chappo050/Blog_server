@@ -226,3 +226,22 @@ exports.delete_post = function (req, res, next) {
     res.json("Post deleted successfully");
   });
 };
+
+exports.check_current_user = function (req, res, next) {
+  try {
+    console.log(req.user.id);
+    console.log(req.params.userId);
+
+    if (req.user.id === req.params.userId) {
+      res.status(200).json({
+        logged: true
+      });
+    } else {
+      res.status(200).json({
+        logged: false
+      });
+    }
+  } catch (error) {
+    next(err);
+  }
+};

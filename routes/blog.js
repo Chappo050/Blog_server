@@ -15,6 +15,8 @@ router.get("/:userId/count", blogController.count_posts_user);
 
 router.get('/post/:postId', authCheck.checkAuthenticated, blogController.get_single_post)
 
+router.get('/:userId/auth', blogController.check_current_user)
+
 
 //POST//
 
