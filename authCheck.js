@@ -1,3 +1,5 @@
+const passport = require("passport");
+
 
 //Middleware functions
 exports.checkAuthenticated = (req, res, next) => {
@@ -5,15 +7,13 @@ exports.checkAuthenticated = (req, res, next) => {
       return next();
     }
   
-    res.redirect("/user/login");
+    res.status(403).json({});
   };
   
 exports.checkNotAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
-      return res.redirect("/");
+      return res.status(403).json({});
     }
   
     return next();
   };
-  
-  

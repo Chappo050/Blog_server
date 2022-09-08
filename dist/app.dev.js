@@ -18,6 +18,10 @@ var cookieParser = require("cookie-parser");
 
 var logger = require("morgan");
 
+var multer = require('multer');
+
+var cors = require('cors');
+
 var passport = require("passport");
 
 var flash = require("express-flash");
@@ -28,7 +32,11 @@ var compression = require("compression"); //Compression
 
 
 var helmet = require("helmet"); //Protection
-//Model
+
+
+var initilizePassport = require("./passport_config");
+
+var MongoStore = require('connect-mongo'); //Model
 
 
 var User = require("./models/user.js"); //Route imports
@@ -37,6 +45,8 @@ var User = require("./models/user.js"); //Route imports
 var indexRouter = require("./routes/index");
 
 var userRouter = require("./routes/user");
+
+var blogRouter = require("./routes/blog");
 
 var app = express(); //No view engine
 // Set up mongoose connection to mongoDB
@@ -51,27 +61,40 @@ mongoose.connect(mongoDB, {
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:")); //Middleware
 
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 app.use(flash());
 app.use(session({
   secret: process.env.SESSION_SECRET,
+  cookie: {
+    _expires: 86400000
+  },
+  //1 day
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: mongoDB,
+    collection: 'sessions'
+  })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(helmet());
 app.use(logger("dev"));
-app.use(express.json());
 app.use(express.urlencoded({
   extended: false
 }));
+app.use(express.json());
 app.use(cookieParser());
 app.use(compression()); //Compress all routes
 
 app.use(express["static"](path.join(__dirname, "public"))); //ROUTES
 
 app.use("/", indexRouter);
-app.use("/user", userRouter); // catch 404 and forward to error handler
+app.use("/user", userRouter);
+app.use("/blog", blogRouter); // catch 404 and forward to error handler
 
 app.use(function (req, res, next) {
   next(createError(404));
@@ -87,20 +110,4 @@ app.use(function (err, req, res, next) {
     error: err
   });
 });
-module.exports = app; //Middleware functions
-
-var checkAuthenticated = function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-
-  res.redirect("/login");
-};
-
-var checkNotAuthenticated = function checkNotAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return res.redirect("/");
-  }
-
-  return next();
-};
+module.exports = app;

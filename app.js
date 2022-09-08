@@ -12,6 +12,8 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+const multer  = require('multer')
+const cors = require('cors');
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
@@ -19,7 +21,7 @@ const session = require("express-session");
 const compression = require("compression"); //Compression
 const helmet = require("helmet"); //Protection
 const initilizePassport = require("./passport_config");
-
+const MongoStore = require('connect-mongo');
 //Model
 const User = require("./models/user.js");
 
@@ -43,21 +45,25 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 
 
+
 //Middleware
+app.use(cors({origin: true, credentials: true}))
 app.use(flash());
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
+    cookie:{_expires: (86400000 ) }, //1 day
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: mongoDB, collection: 'sessions' })
   })
 );
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(helmet());
 app.use(logger("dev"));
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cookieParser());
 app.use(compression()); //Compress all routes
 app.use(express.static(path.join(__dirname, "public")));
