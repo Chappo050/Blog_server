@@ -68,6 +68,10 @@ app.use(cors({
 app.use(flash());
 app.use(session({
   secret: process.env.SESSION_SECRET,
+  cookie: {
+    _expires: 86400000
+  },
+  //1 day
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({

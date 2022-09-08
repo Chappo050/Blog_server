@@ -94,9 +94,7 @@ exports.user_login_get = (req, res, next) => {
 };
 
 exports.user_logout = (req, res) => {
-  req.session.destroy(function (err) {
-    res.redirect("/");
-  });
+  res.clearCookie("connect.sid").json("Logged out");
 };
 
 exports.get_user_logged_in = (req, res, next) => {

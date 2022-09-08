@@ -144,9 +144,7 @@ exports.user_login_get = function (req, res, next) {
 };
 
 exports.user_logout = function (req, res) {
-  req.session.destroy(function (err) {
-    res.redirect("/");
-  });
+  res.clearCookie("connect.sid").json("Logged out");
 };
 
 exports.get_user_logged_in = function (req, res, next) {
