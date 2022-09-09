@@ -110,7 +110,7 @@ exports.get_user_logged_in = (req, res, next) => {
       }
 
       if (user) {
-        console.log(user);
+        (user);
         // User session exists. Extract time
         if (user.expires.valueOf() > Date.now().valueOf()) {
           res.status(200).json({ message: "Users session is still valid" });

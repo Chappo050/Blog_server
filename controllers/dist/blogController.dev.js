@@ -142,10 +142,10 @@ exports.get_post_list = function (req, res, next) {
 
 exports.get_user_post_list = function (req, res, next) {
   var query = {};
-  console.log(req.params.userId + "   " + req.query.auth); //Not logged in
+  req.params.userId + "   " + req.query.auth; //Not logged in
 
   if (req.params.userId && req.query.auth === "false") {
-    console.log("here");
+    "here";
     var userId = req.params.userId;
     query = {
       user_details: userId,
@@ -203,10 +203,10 @@ function (req, res, next) {
       "new": true
     }, function (err, doc) {
       if (err) {
-        console.log("Something wrong when updating data!");
+        "Something wrong when updating data!";
       }
 
-      console.log(doc);
+      doc;
     });
     res.status(200).json({
       message: "Updated"
@@ -229,8 +229,8 @@ exports.delete_post = function (req, res, next) {
 
 exports.check_current_user = function (req, res, next) {
   try {
-    console.log(req.user.id);
-    console.log(req.params.userId);
+    req.user.id;
+    req.params.userId;
 
     if (req.user.id === req.params.userId) {
       res.status(200).json({
