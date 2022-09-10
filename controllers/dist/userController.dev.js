@@ -164,7 +164,7 @@ exports.get_user_logged_in = function (req, res, next) {
     }
 
     if (user) {
-      console.log(user); // User session exists. Extract time
+      user; // User session exists. Extract time
 
       if (user.expires.valueOf() > Date.now().valueOf()) {
         res.status(200).json({

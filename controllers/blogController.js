@@ -121,10 +121,10 @@ exports.get_post_list = (req, res, next) => {
 // Display list of all books.
 exports.get_user_post_list = (req, res, next) => {
   let query = {};
-  console.log(req.params.userId + "   " + req.query.auth);
+  (req.params.userId + "   " + req.query.auth);
   //Not logged in
   if (req.params.userId && req.query.auth === "false") {
-    console.log("here");
+    ("here");
     const userId = req.params.userId;
     query = { user_details: userId, isPublic: true };
   }
@@ -177,10 +177,10 @@ exports.edit_post = [
         { new: true },
         (err, doc) => {
           if (err) {
-            console.log("Something wrong when updating data!");
+            ("Something wrong when updating data!");
           }
 
-          console.log(doc);
+          (doc);
         }
       );
       res.status(200).json({ message: "Updated" });
