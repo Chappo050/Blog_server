@@ -2,6 +2,9 @@
   "name": "profile-blog",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "18.6.0"
+  },
   "scripts": {
     "build": "cd client && npm run build",
     "install-client": "cd client && npm install",
