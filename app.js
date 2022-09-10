@@ -43,9 +43,6 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-
-
-
 //Middleware
 app.use(cors({origin: true, credentials: true}))
 app.use(flash());
@@ -68,10 +65,12 @@ app.use(cookieParser());
 app.use(compression()); //Compress all routes
 app.use(express.static(path.join(__dirname, '../client/build')));
 
+//change something here to get iot wokring
+
 //ROUTES
-app.use("/api", indexRouter);
-app.use("/api/user", userRouter);
-app.use("/api/blog", blogRouter);
+app.use("/", indexRouter);
+app.use("/user", userRouter);
+app.use("/blog", blogRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
