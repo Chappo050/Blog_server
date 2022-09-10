@@ -201,8 +201,6 @@ exports.delete_post = (req, res, next) => {
 
 exports.check_current_user = (req, res, next) => {
   try {
-    (req.user.id);
-    (req.params.userId);
     if (req.user.id === req.params.userId) {
       res.status(200).json({logged: true})
     } else {
