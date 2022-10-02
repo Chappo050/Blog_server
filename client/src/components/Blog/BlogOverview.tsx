@@ -4,7 +4,7 @@ import axios from "axios";
 const { DateTime } = require("luxon");
 
 const api = axios.create({
-  baseURL: "blog/",
+  baseURL: "api/blog/",
 });
 
 interface User {
