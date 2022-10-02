@@ -70,7 +70,7 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 //ROUTES
 app.use("/", indexRouter);
 app.use("/user", userRouter);
-app.use("api/blog", blogRouter);
+app.use("/api/blog", blogRouter);
 
 
 // catchall
